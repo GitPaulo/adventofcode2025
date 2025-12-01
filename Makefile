@@ -1,7 +1,7 @@
 .PHONY: run clean inputs
 
 run:
-	@cd day$(DAY) && go run 01.go
+	@cd day$(DAY) && go run $(DAY).go
 
 clean:
 	@rm -rf bin/
