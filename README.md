@@ -5,8 +5,9 @@ https://adventofcode.com/2025/
 ## Setup
 ```bash
 export AOC_SESSION=""
-./fetch_inputs.sh
+make inputs
 ```
+
 ## Run
 ```bash
 make run DAY=01
