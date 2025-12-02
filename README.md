@@ -16,6 +16,11 @@ make inputs           # Fetch inputs
 make run DAY=01
 ```
 
+to check answer,
+
+```bash
+make answer DAY=01 PART=1 ANSWER=1234
+```
 
 ## Days Completed
 

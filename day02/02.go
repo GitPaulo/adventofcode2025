@@ -42,6 +42,7 @@ func solve(ranges []string) (int, int) {
 		}
 
 		// Part 2
+		// TODO
 
 	}
 

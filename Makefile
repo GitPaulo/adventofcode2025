@@ -1,4 +1,4 @@
-.PHONY: run clean inputs install-hooks
+.PHONY: run clean inputs answer install-hooks
 
 run:
 	@cd day$(DAY) && go run $(DAY).go
@@ -7,7 +7,10 @@ clean:
 	@rm -rf bin/
 
 inputs:
-	@./fetch_inputs.sh
+	@./scripts/fetch_inputs.sh
+
+answer:
+	@./scripts/post_answer.sh $(DAY) $(PART) $(ANSWER)
 
 install-hooks:
 	@cp hooks/pre-push .git/hooks/pre-push
