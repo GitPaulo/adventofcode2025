@@ -1,0 +1,36 @@
+#!/bin/bash
+
+REPO_ROOT=$(git rev-parse --show-toplevel)
+cd "$REPO_ROOT" || exit 1
+
+LEADERBOARD_HTML="${REPO_ROOT}/leaderboard.html"
+README="${REPO_ROOT}/README.md"
+
+# Skip if no leaderboard.html
+if [ ! -f "$LEADERBOARD_HTML" ]; then
+    exit 0
+fi
+
+TABLE=$(./fetch_leaderboard.sh "$LEADERBOARD_HTML" 2>/dev/null)
+if [ -z "$TABLE" ]; then
+    exit 0
+fi
+
+# Remove old Days Completed section if it exists
+sed -i '/^# Days Completed$/,/^#/{ /^# Days Completed$/d; /^#/!d; }' "$README"
+sed -i '/^# Days Completed$/d' "$README"
+
+# Append new leaderboard to end of README
+echo "" >> "$README"
+echo "# Days Completed" >> "$README"
+echo "" >> "$README"
+echo "$TABLE" >> "$README"
+
+# Check if there were changes
+if git diff --quiet "$README"; then
+    exit 0
+fi
+
+git add "$README"
+git commit -m "Update leaderboard [git hook]"
+echo "Updated leaderboard in README.md"

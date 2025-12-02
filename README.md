@@ -16,7 +16,7 @@ make inputs         # Fetch puzzle inputs
 make run DAY=01
 ```
 
-# Days Completed
+# Leaderboard
 
 | Day | Part 1 | Part 2 |
 |-----|--------|--------|
