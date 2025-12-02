@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -43,4 +44,18 @@ func ParseCSV(s string) []string {
 		result = append(result, strings.TrimSpace(part))
 	}
 	return result
+}
+
+// parses a range string like "1-10" into two integers
+func ParseRange(r string) (int, int) {
+	L, R, ok := strings.Cut(r, "-")
+	if !ok {
+		panic("invalid range")
+	}
+	return Atoi(L), Atoi(R)
+}
+
+// counts the number of digits in an integer
+func CountDigits(n int) int {
+	return len(fmt.Sprintf("%d", n))
 }

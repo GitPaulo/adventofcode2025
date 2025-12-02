@@ -3,30 +3,17 @@ package main
 import (
 	"fmt"
 	"math"
-	"strings"
 
 	"adventofcode2025/utils"
 )
-
-func parseRange(r string) (int, int) {
-	L, R, ok := strings.Cut(r, "-")
-	if !ok {
-		panic("invalid range")
-	}
-	return utils.Atoi(L), utils.Atoi(R)
-}
-
-func countDigits(n int) int {
-	return len(fmt.Sprintf("%d", n))
-}
 
 func solve(ranges []string) (int, int) {
 	sum := 0
 
 	for _, r := range ranges {
-		L, R := parseRange(r)
-		minDigits := countDigits(L)
-		maxDigits := countDigits(R)
+		L, R := utils.ParseRange(r)
+		minDigits := utils.CountDigits(L)
+		maxDigits := utils.CountDigits(R)
 
 		for d := minDigits; d <= maxDigits; d++ {
 			if d%2 != 0 {
@@ -53,6 +40,9 @@ func solve(ranges []string) (int, int) {
 				sum += AA
 			}
 		}
+
+		// Part 2
+
 	}
 
 	return sum, 0
