@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"adventofcode2025/utils"
 )
@@ -23,7 +22,7 @@ func solve(lines []string) (int, int) {
 			dial += value
 		}
 
-		if dial % 100 == 0 {
+		if dial%100 == 0 {
 			password++
 		}
 	}
@@ -49,7 +48,7 @@ func solve(lines []string) (int, int) {
 			dial -= value
 		} else if direction == 'R' {
 			// count partial rotation if we wrap past 99 to 0
-			if dial + remainder > 99 {
+			if dial+remainder > 99 {
 				password++
 			}
 			dial += value
@@ -64,7 +63,7 @@ func solve(lines []string) (int, int) {
 }
 
 func main() {
-	lines := utils.ReadLines(os.Args[1])
+	lines := utils.ReadLines("input")
 	part1, part2 := solve(lines)
 	fmt.Printf("Part 1: %d\n", part1)
 	fmt.Printf("Part 2: %d\n", part2)
