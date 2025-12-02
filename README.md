@@ -7,7 +7,7 @@ https://adventofcode.com/2025/
 ```bash
 export AOC_SESSION=""
 make install-hooks  # Install git hooks
-make inputs         # Fetch puzzle inputs
+make inputs         # Fetch inputs
 ```
 
 ## Run
