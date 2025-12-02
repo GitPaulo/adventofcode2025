@@ -7,8 +7,16 @@ cd "$REPO_ROOT" || exit 1
 
 README="${REPO_ROOT}/README.md"
 
+echo "Running pre-push hook..." >&2
+
+# Try to load AOC_SESSION from .env if not already set
+if [[ -z "${AOC_SESSION:-}" ]] && [[ -f "${REPO_ROOT}/.env" ]]; then
+    source "${REPO_ROOT}/.env"
+fi
+
 # Skip if AOC_SESSION not set
 if [[ -z "${AOC_SESSION:-}" ]]; then
+    echo "Skipping leaderboard update (AOC_SESSION not set)" >&2
     exit 0
 fi
 
@@ -34,5 +42,5 @@ if git diff --quiet "$README"; then
 fi
 
 git add "$README"
-git commit -m "Update leaderboard [git hook]"
+git commit -m "update leaderboard [git hook]"
 echo "Updated leaderboard in README.md"
