@@ -5,9 +5,9 @@ https://adventofcode.com/2025/
 ## Setup
 
 ```bash
-export AOC_SESSION=""
-make install-hooks  # Install git hooks
-make inputs         # Fetch inputs
+export AOC_SESSION="" # AOC session cookie
+make install-hooks    # Install git hooks
+make inputs           # Fetch inputs
 ```
 
 ## Run
