@@ -38,7 +38,7 @@ sed -i '/^## Days Completed$/,$d' "$README"
     echo "$TABLE" | tail -n +3 | while read -r line; do
         day=$(echo "$line" | grep -oP '\|\s*\K\d+' | head -1)
         day_padded=$(printf "%02d" "$day")
-        echo "$line [day${day_padded}](day${day_padded}/${day_padded}.go) |" | sed 's/| |/|/'
+        echo "$line [here](day${day_padded}/${day_padded}.go) |" | sed 's/| |/|/'
     done
 } >> "$README"
 
