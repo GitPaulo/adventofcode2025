@@ -12,11 +12,22 @@ main() {
     exit 1
   fi
 
-  local html
-  html=$(curl -s -H "Cookie: session=${AOC_SESSION}" \
+  local response status_code html
+  response=$(curl -s -w "\n%{http_code}" -H "Cookie: session=${AOC_SESSION}" \
     "https://adventofcode.com/${AOC_YEAR}/leaderboard/self")
 
-  if [[ "${html}" == *"403 Forbidden"* ]]; then
+  html=$(echo "${response}" | head -n -1)
+  status_code=$(echo "${response}" | tail -n 1)
+
+  if [[ "${status_code}" == "500" ]]; then
+    echo "Error: 500 Internal Server Error" >&2
+    exit 1
+  fi
+  if [[ "${status_code}" == "303" ]]; then
+    echo "Error: 303 Redirect - Authentication failed" >&2
+    exit 1
+  fi
+  if [[ "${status_code}" == "403" ]]; then
     echo "Error: 403 Forbidden" >&2
     exit 1
   fi
@@ -30,8 +41,8 @@ main() {
   echo "| Day | Part 1 | Part 2 |"
   echo "|-----|--------|--------|"
 
-  # Parse and format times
-  echo "${html}" | grep -oP '\s+\d+\s+\d+:\d+:\d+\s+\d+:\d+:\d+' | \
+  # Parse and format times (handles both complete and incomplete days)
+  echo "${html}" | grep -oP '\s+\d+\s+\d+:\d+:\d+(?:\s+\d+:\d+:\d+|\s+-)' | \
   while read -r line; do
     local day part1 part2
     read -r day part1 part2 <<< "${line}"
