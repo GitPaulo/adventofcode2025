@@ -26,9 +26,9 @@ if [[ -z "${TABLE}" ]]; then
     exit 0
 fi
 
-# Remove old Days Completed section if it exists
-sed -i '/^# Days Completed$/,/^#/{ /^# Days Completed$/d; /^#/!d; }' "$README"
-sed -i '/^# Days Completed$/d' "$README"
+# Remove old Days Completed section
+sed -i '/^# Days Completed$/,${/^# Days Completed$/d;/^|.*|$/d;/^$/d;}' "$README"
+sed -i -e :a -e '/^\s*$/d;N;ba' "$README"
 
 # Append new leaderboard to end of README
 echo "" >> "$README"
