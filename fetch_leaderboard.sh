@@ -1,24 +1,24 @@
 #!/bin/bash
 #
-# Parse Advent of Code personal leaderboard HTML to markdown table
-# Usage: ./fetch_leaderboard.sh [file.html] or cat file.html | ./fetch_leaderboard.sh
+# Fetch and parse Advent of Code personal leaderboard to markdown table.
 
 set -euo pipefail
 
-readonly INPUT="${1:--}"
-
-if [[ "${INPUT}" = "-" ]]; then
-  HTML=$(cat)
-else
-  HTML=$(cat "${INPUT}")
-fi
-
-if grep -q "403 Forbidden" <<< "${HTML}"; then
-  echo "Error: 403 Forbidden. Fetch from host machine." >&2
+if [[ -z "${AOC_SESSION:-}" ]]; then
+  echo "Error: AOC_SESSION environment variable not set" >&2
   exit 1
 fi
-if grep -q "auth/login" <<< "${HTML}"; then
-  echo "Error: Authentication failed." >&2
+
+# Fetch leaderboard
+html=$(curl -s -H "Cookie: session=${AOC_SESSION}" \
+  "https://adventofcode.com/2025/leaderboard/self")
+
+if [[ "${html}" == *"403 Forbidden"* ]]; then
+  echo "Error: 403 Forbidden" >&2
+  exit 1
+fi
+if [[ "${html}" == *"auth/login"* ]]; then
+  echo "Error: Authentication failed" >&2
   exit 1
 fi
 
@@ -26,7 +26,9 @@ fi
 echo "| Day | Part 1 | Part 2 |"
 echo "|-----|--------|--------|"
 
-grep -oP '^\s+\d+\s+\d+:\d+:\d+\s+\d+:\d+:\d+' <<< "${HTML}" | while read -r line; do
+# Parse and format times
+echo "${html}" | grep -oP '\s+\d+\s+\d+:\d+:\d+\s+\d+:\d+:\d+' | \
+while read -r line; do
   read -r day part1 part2 <<< "${line}"
   printf "| %2s | %8s | %8s |\n" "${day}" "${part1}" "${part2}"
 done
