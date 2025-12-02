@@ -1,18 +1,20 @@
 #!/bin/bash
 
+set -e
+
 REPO_ROOT=$(git rev-parse --show-toplevel)
 cd "$REPO_ROOT" || exit 1
 
-LEADERBOARD_HTML="${REPO_ROOT}/leaderboard.html"
 README="${REPO_ROOT}/README.md"
 
-# Skip if no leaderboard.html
-if [ ! -f "$LEADERBOARD_HTML" ]; then
+# Skip if AOC_SESSION not set
+if [[ -z "${AOC_SESSION:-}" ]]; then
     exit 0
 fi
 
-TABLE=$(./fetch_leaderboard.sh "$LEADERBOARD_HTML" 2>/dev/null)
-if [ -z "$TABLE" ]; then
+# Fetch leaderboard
+TABLE=$(./fetch_leaderboard.sh 2>/dev/null)
+if [[ -z "${TABLE}" ]]; then
     exit 0
 fi
 
