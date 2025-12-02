@@ -26,11 +26,11 @@ if [[ -z "${TABLE}" ]]; then
     exit 0
 fi
 
-# Remove everything from "# Days Completed" onwards
-sed -i '/^# Days Completed$/,$d' "$README"
+# Remove everything from "## Days Completed" onwards
+sed -i '/^## Days Completed$/,$d' "$README"
 
 # Append new leaderboard
-printf "\n# Days Completed\n\n%s\n" "$TABLE" >> "$README"
+printf "## Days Completed\n\n%s\n" "$TABLE" >> "$README"
 
 # Check if there were changes
 if git diff --quiet "$README"; then
