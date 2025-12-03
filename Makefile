@@ -10,7 +10,7 @@ inputs:
 	@./scripts/fetch_inputs.sh
 
 answer:
-	@./scripts/post_answer.sh $(DAY) $(PART) $(ANSWER)
+	@DAY=$(DAY) PART=$(PART) ANSWER=$(ANSWER) ./scripts/post_answer.sh
 
 install-hooks:
 	@cp hooks/pre-push .git/hooks/pre-push

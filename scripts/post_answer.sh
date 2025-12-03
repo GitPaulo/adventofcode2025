@@ -14,20 +14,23 @@ main() {
     exit 1
   fi
 
-  local -r day="${1:-01}"
-  local -r part="${2:-1}"
-  local -r answer="${3:--1}"
+  local -r day="${1:-${DAY:-01}}"
+  local -r part="${2:-${PART:-1}}"
+  local -r answer="${3:-${ANSWER:--1}}"
 
-  echo "Submitting answer for Day ${day}, Part ${part}: ${answer}"
+  echo "Submitting answer for day ${day}, part ${part} with answer ${answer}"
 
+  # Remove leading zeros from day
+  local -r day_int=$((10#${day}))
+  
   local response
   response=$(curl -sS -b "session=${AOC_SESSION}" \
     -X POST \
     -d "level=${part}&answer=${answer}" \
-    "https://adventofcode.com/${AOC_YEAR}/day/${day}/answer")
+    "https://adventofcode.com/${AOC_YEAR}/day/${day_int}/answer")
 
   # Extract and display article content
-  echo "${response}" | grep -oP '(?<=<article>).*?(?=</article>)' | sed 's/<[^>]*>//g' | sed 's/\[.*\]//g'
+  echo "${response}" | grep "<article>" | sed 's/.*<article>//; s/<\/article>.*//' | sed 's/<[^>]*>//g' | sed 's/\[.*\]//g' || echo "Failed to extract article"
 }
 
 main "$@"
