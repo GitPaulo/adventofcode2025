@@ -14,14 +14,9 @@ main() {
     exit 1
   fi
 
-  if [[ $# -ne 3 ]]; then
-    echo "Usage: $0 <day> <part> <answer>" >&2
-    exit 1
-  fi
-
-  local -r day="${1}"
-  local -r part="${2}"
-  local -r answer="${3}"
+  local -r day="${1:-01}"
+  local -r part="${2:-1}"
+  local -r answer="${3:--1}"
 
   echo "Submitting answer for Day ${day}, Part ${part}: ${answer}"
 
@@ -31,26 +26,8 @@ main() {
     -d "level=${part}&answer=${answer}" \
     "https://adventofcode.com/${AOC_YEAR}/day/${day}/answer")
 
-  # Parse response for feedback
-  if [[ "${response}" == *"That's the right answer"* ]]; then
-    echo "✓ Correct!"
-  elif [[ "${response}" == *"That's not the right answer"* ]]; then
-    echo "✗ Incorrect"
-    if [[ "${response}" == *"too low"* ]]; then
-      echo "  (Answer is too low)"
-    elif [[ "${response}" == *"too high"* ]]; then
-      echo "  (Answer is too high)"
-    fi
-  elif [[ "${response}" == *"You gave an answer too recently"* ]]; then
-    echo "⏱ Rate limited - wait before submitting again"
-  elif [[ "${response}" == *"Did you already complete it"* ]] || [[ "${response}" == *"don't seem to be solving the right level"* ]]; then
-    echo "✓ Already completed"
-  elif [[ "${response}" == *"You don't seem to be solving the right level"* ]]; then
-    echo "✓ Already completed this part"
-  else
-    # Extract and display article content
-    echo "${response}" | sed -n 's/.*<article>\(.*\)<\/article>.*/\1/p' | sed 's/<[^>]*>//g'
-  fi
+  # Extract and display article content
+  echo "${response}" | grep -oP '(?<=<article>).*?(?=</article>)' | sed 's/<[^>]*>//g' | sed 's/\[.*\]//g'
 }
 
 main "$@"
