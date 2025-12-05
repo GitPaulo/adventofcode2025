@@ -9,6 +9,7 @@ import (
 func solve(lines [][]byte) (int, int) {
 	rows := len(lines)
 	cols := len(lines[0])
+
 	// avoid loops in neighbor checks
 	neighbors := [][2]int{
 		{-1, -1}, {-1, 0}, {-1, 1},
@@ -54,6 +55,55 @@ func solve(lines [][]byte) (int, int) {
 
 	// Part 2
 	p2 := 0
+	// inline copy loop
+	grid := make([][]byte, rows)
+	for i := range lines {
+		row := make([]byte, cols)
+		copy(row, lines[i])
+		grid[i] = row
+	}
+
+	for {
+		removedThisRound := 0
+
+		for r := 0; r < rows; r++ {
+			for c := 0; c < cols; c++ {
+
+				if grid[r][c] != '@' {
+					continue
+				}
+
+				count := 0
+				for _, d := range neighbors {
+					nr := r + d[0]
+					nc := c + d[1]
+
+					if nr < 0 || nr >= rows || nc < 0 || nc >= cols {
+						continue
+					}
+
+					if grid[nr][nc] == '@' {
+						count++
+					}
+
+					if count >= 4 {
+						break
+					}
+				}
+
+				if count < 4 {
+					// remove it
+					grid[r][c] = '.'
+					removedThisRound++
+					p2++
+				}
+			}
+		}
+
+		if removedThisRound == 0 {
+			break
+		}
+	}
 
 	return p1, p2
 }

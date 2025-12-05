@@ -44,6 +44,7 @@ sed -i '/^## Days Completed$/,$d' "$README"
 
 # Check if there were changes
 if git diff --quiet "$README"; then
+    echo "No updates made" >&2
     exit 0
 fi
 
