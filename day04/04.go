@@ -6,12 +6,60 @@ import (
 	"adventofcode2025/utils"
 )
 
-func solve(lines []string) (int, int) {
-	return 0, 0
+func solve(lines [][]byte) (int, int) {
+	rows := len(lines)
+	cols := len(lines[0])
+	// avoid loops in neighbor checks
+	neighbors := [][2]int{
+		{-1, -1}, {-1, 0}, {-1, 1},
+		{0, -1}, {0, 1},
+		{1, -1}, {1, 0}, {1, 1},
+	}
+
+	// Part 1
+	p1 := 0
+	for r := 0; r < rows; r++ {
+		for c := 0; c < cols; c++ {
+
+			// skip '.'
+			if lines[r][c] == '.' {
+				continue
+			}
+
+			count := 0
+			// 8 neighbor positions
+			for _, d := range neighbors {
+				nr := r + d[0]
+				nc := c + d[1]
+
+				if nr < 0 || nr >= rows || nc < 0 || nc >= cols {
+					continue
+				}
+
+				// count '@' neighbors
+				if lines[nr][nc] == '@' {
+					count++
+				}
+
+				if count >= 4 {
+					break
+				}
+			}
+
+			if count < 4 {
+				p1++
+			}
+		}
+	}
+
+	// Part 2
+	p2 := 0
+
+	return p1, p2
 }
 
 func main() {
-	lines, _ := utils.ReadLines("input")
+	lines := utils.ReadGrid("input")
 	p1, p2 := solve(lines)
 	fmt.Println("Part 1:", p1)
 	fmt.Println("Part 2:", p2)

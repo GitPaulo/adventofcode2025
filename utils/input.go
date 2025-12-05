@@ -59,3 +59,23 @@ func ParseRange(r string) (int, int) {
 func CountDigits(n int) int {
 	return len(fmt.Sprintf("%d", n))
 }
+
+// reads a grid of bytes from a file, ensuring all rows have the same length
+func ReadGrid(path string) [][]byte {
+	lines := ReadLines(path)
+	if len(lines) == 0 {
+		panic("empty file")
+	}
+
+	width := len(lines[0])
+	grid := make([][]byte, len(lines))
+
+	for i, line := range lines {
+		if len(line) != width {
+			panic(fmt.Sprintf("bad grid (line %d has length %d, expected %d)", i, len(line), width))
+		}
+		grid[i] = []byte(line)
+	}
+
+	return grid
+}
