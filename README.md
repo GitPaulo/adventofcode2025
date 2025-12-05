@@ -26,6 +26,7 @@ make answer DAY=01 PART=1 ANSWER=1234
 
 | Day | Part 1 | Part 2 | Solution |
 |-----|--------|--------|----------|
+|  4 |     >24h |        - | [here](day04/04.go) |
 |  3 | 17:25:35 | 19:07:27 | [here](day03/03.go) |
 |  2 | 11:52:09 |        - | [here](day02/02.go) |
 |  1 | 12:30:47 | 13:53:32 | [here](day01/01.go) |
